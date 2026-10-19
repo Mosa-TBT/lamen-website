@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Discover LAMEN's branches, community photographs and official films."
+    />
+    <title>Gallery — LAMEN Microfinance</title>
+    <link rel="icon" href="assets/lamen-logo.png" />
+    <link rel="stylesheet" href="gallery.css" />
+    <link rel="stylesheet" href="achievements.css" />
+    <script src="gallery-data.js" defer></script>
+    <script src="gallery.js" defer></script>
+    <script src="achievements.js" defer></script>
+  </head>
+  <body>
+    <header class="gallery-nav">
+      <a class="gallery-brand" href="index.html"
+        ><img src="assets/lamen-logo.png" alt="" />LAMEN</a
+      >
+      <nav class="gallery-nav-links" aria-label="Main navigation">
+        <a href="about.html">About</a
+        ><a href="gallery.html" aria-current="page">Gallery</a
+        ><a href="contact.html">Contact</a
+        ><button class="achievement-trigger" data-achievements>
+          Achievements</button
+        ><a class="gallery-back" href="index.html">Back to home ↗</a>
+      </nav>
+    </header>
+    <main>
+      <header class="gallery-intro">
+        <div>
+          <span class="gallery-kicker"
+            >THE PEOPLE. THE PLACES. THE PROGRESS.</span
+          >
+          <h1>A closer look<br />at <em>our world.</em></h1>
+        </div>
+        <p>
+          Moments from our branches and stories from our community. Explore
+          LAMEN in photographs and film.
+        </p>
+      </header>
+      <div class="gallery-tools">
+        <div class="gallery-filters" aria-label="Media type">
+          <button data-gallery-filter="all" aria-pressed="true">
+            All moments</button
+          ><button data-gallery-filter="photo" aria-pressed="false">
+            Photos</button
+          ><button data-gallery-filter="video" aria-pressed="false">
+            Films
+          </button>
+        </div>
+        <select
+          id="gallery-category"
+          aria-label="Filter by province or collection"
+        >
+          <option value="all">All collections</option>
+        </select>
+      </div>
+      <section
+        class="gallery-stage"
+        aria-label="Circular photo and video gallery"
+      >
+        <div
+          class="gallery-track"
+          tabindex="0"
+          aria-label="Scroll horizontally or use left and right arrow keys"
+        ></div>
+        <p id="gallery-empty" class="empty-gallery" hidden>
+          No items in this collection. Try another filter.
+        </p>
+      </section>
+      <div class="gallery-controls">
+        <div class="gallery-position">
+          <span id="gallery-count" aria-live="polite">01 / 20</span
+          ><span class="gallery-progress" aria-hidden="true"
+            ><span></span
+          ></span>
+        </div>
+        <span class="gallery-help">SCROLL SIDEWAYS · SELECT TO EXPLORE</span>
+        <div class="gallery-control-buttons">
+          <button id="gallery-prev" aria-label="Previous item, wraps to last">
+            ←</button
+          ><button id="gallery-next" aria-label="Next item, wraps to first">
+            →
+          </button>
+        </div>
+      </div>
+    </main>
+    <footer class="gallery-footer">
+      <p>
+        Photos are from LAMEN’s official branch and activity galleries. General
+        activity photos do not have a confirmed province. Films are official
+        YouTube links and require internet access.
+      </p>
+      <a href="https://lamen.af/Gallery.html" target="_blank" rel="noopener"
+        >View the official archive ↗</a
+      >
+    </footer>
+    <dialog
+      id="gallery-viewer"
+      class="media-dialog"
+      aria-labelledby="media-title"
+    >
+      <div class="media-head">
+        <h2 id="media-title"></h2>
+        <button
+          class="media-close"
+          id="media-close"
+          aria-label="Close media viewer"
+        >
+          ×
+        </button>
+      </div>
+      <div id="media-content" class="media-content"></div>
+      <div class="media-foot">
+        <span>LAMEN · Photo &amp; film archive</span
+        ><a id="media-source" target="_blank" rel="noopener"
+          >Original source ↗</a
+        >
+      </div>
+    </dialog>
+  </body>
+</html>

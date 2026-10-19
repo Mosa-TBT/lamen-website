@@ -1,0 +1,2159 @@
+/* =====================================================================
+   LAMEN — Premium design layer
+   Loaded last so it can unify the earlier layered styles into one
+   green-and-white system. Sections:
+     1. Tokens            5. Hero                 9. Data & leadership
+     2. Motion system     6. Purpose & products  10. Contact & footer
+     3. Global polish     7. Journey & impact    11. Responsive
+     4. Header            8. Process & trust     12. Reduced motion
+   ===================================================================== */
+
+/* 1. TOKENS ----------------------------------------------------------- */
+:root {
+  --lx-emerald: #07845b;
+  --lx-emerald-bright: #10a875;
+  --lx-forest: #064b36;
+  --lx-deep: #033d2d;
+  --lx-night: #022419;
+  --lx-mint: #b9f0d5;
+  --lx-mint-bright: #7ee3b2;
+  --lx-mist: #f2fbf6;
+  --lx-warm: #fbfcf8;
+  --lx-white: #ffffff;
+  --lx-ink: #17231e;
+  --lx-muted: #4d6157;
+  --lx-line: rgba(6, 75, 54, 0.12);
+
+  --lx-grad-cta: linear-gradient(135deg, #12b27c 0%, #07845b 48%, #055b40 100%);
+  --lx-grad-cta-hover: linear-gradient(135deg, #1bc98e 0%, #0a9466 48%, #066a4a 100%);
+  --lx-grad-text: linear-gradient(100deg, #05744f 0%, #0ea371 48%, #44c993 100%);
+  --lx-grad-text-light: linear-gradient(100deg, #ffffff 0%, #c9f7df 40%, #6fe0aa 100%);
+  --lx-grad-deep:
+    radial-gradient(120% 80% at 88% -10%, rgba(16, 168, 117, 0.42), transparent 55%),
+    radial-gradient(90% 70% at -10% 110%, rgba(126, 227, 178, 0.18), transparent 60%),
+    linear-gradient(160deg, #075a40 0%, #04402f 45%, #022a1f 100%);
+  --lx-grad-mist: linear-gradient(180deg, #ffffff 0%, #f2fbf6 100%);
+  --lx-grad-mist-up: linear-gradient(180deg, #f2fbf6 0%, #ffffff 100%);
+
+  --lx-shadow-sm: 0 2px 8px rgba(3, 61, 45, 0.06);
+  --lx-shadow-md: 0 18px 40px -18px rgba(3, 61, 45, 0.28);
+  --lx-shadow-lg: 0 40px 90px -40px rgba(3, 61, 45, 0.45);
+
+  /* Motion: one easing family, three durations, one stagger step. */
+  --lx-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --lx-ease-io: cubic-bezier(0.65, 0, 0.35, 1);
+  --lx-t1: 0.32s;
+  --lx-t2: 0.7s;
+  --lx-t3: 0.95s;
+  --lx-stagger: 85ms;
+
+  --blue: var(--lx-emerald);
+  --mint: var(--lx-emerald-bright);
+  --ink: var(--lx-ink);
+  --muted: var(--lx-muted);
+}
+
+/* 2. MOTION SYSTEM ---------------------------------------------------- */
+/* Hidden states exist only once lamen-premium.js has added .lx-motion,
+   so content is always visible without JavaScript or with reduced motion. */
+html.lx-motion [data-lx] {
+  transition:
+    opacity var(--lx-t2) var(--lx-ease),
+    transform var(--lx-t3) var(--lx-ease),
+    clip-path var(--lx-t3) var(--lx-ease);
+  transition-delay: calc(var(--lx-i, 0) * var(--lx-stagger));
+}
+html.lx-motion [data-lx="rise"] {
+  opacity: 0;
+  transform: translate3d(0, 34px, 0);
+}
+html.lx-motion [data-lx="left"] {
+  opacity: 0;
+  transform: translate3d(-40px, 0, 0);
+}
+html.lx-motion [data-lx="right"] {
+  opacity: 0;
+  transform: translate3d(40px, 0, 0);
+}
+html.lx-motion [data-lx="scale"] {
+  opacity: 0;
+  transform: scale(0.94);
+}
+/* Masked heading: text slides up from behind its own clip edge. */
+html.lx-motion [data-lx="mask"] {
+  clip-path: inset(0 0 100% 0);
+  transform: translate3d(0, 0.45em, 0);
+}
+/* Image: frame opens from the centre while the photo settles. */
+html.lx-motion [data-lx="image"] {
+  clip-path: inset(10% 8% 10% 8% round 28px);
+  opacity: 0.4;
+}
+html.lx-motion [data-lx="image"] img {
+  transform: scale(1.16);
+  transition: transform 1.6s var(--lx-ease);
+}
+html.lx-motion [data-lx].lx-in {
+  opacity: 1;
+  transform: none;
+  clip-path: inset(0 0 0 0 round 0);
+}
+html.lx-motion [data-lx="image"].lx-in img {
+  transform: scale(1);
+}
+
+/* Decorative lines draw themselves in. */
+html.lx-motion [data-lx="line"] {
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+html.lx-motion [data-lx="line"].lx-in {
+  transform: scaleX(1);
+}
+
+@keyframes lx-drift-a {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(6%, 4%, 0) scale(1.12); }
+}
+@keyframes lx-drift-b {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1.05); }
+  50% { transform: translate3d(-7%, -5%, 0) scale(0.95); }
+}
+@keyframes lx-sheen {
+  from { transform: translateX(-120%) skewX(-18deg); }
+  to { transform: translateX(260%) skewX(-18deg); }
+}
+@keyframes lx-border-spin {
+  to { --lx-angle: 360deg; }
+}
+@property --lx-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* Reusable atmospheric layer for dark gradient panels. */
+.lx-aurora {
+  position: absolute;
+  inset: -20%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.lx-aurora::before,
+.lx-aurora::after {
+  content: "";
+  position: absolute;
+  width: 60%;
+  height: 60%;
+  border-radius: 50%;
+  will-change: transform;
+}
+.lx-aurora::before {
+  top: 5%;
+  right: 5%;
+  background: radial-gradient(circle, rgba(16, 168, 117, 0.55), transparent 65%);
+  animation: lx-drift-a 18s var(--lx-ease-io) infinite;
+}
+.lx-aurora::after {
+  bottom: 0;
+  left: 0;
+  background: radial-gradient(circle, rgba(126, 227, 178, 0.28), transparent 65%);
+  animation: lx-drift-b 22s var(--lx-ease-io) infinite;
+}
+.lx-paused .lx-aurora::before,
+.lx-paused .lx-aurora::after,
+.lx-paused .hero-aurora span {
+  animation-play-state: paused;
+}
+
+/* Gradient text helpers. */
+.lx-grad-text {
+  background: var(--lx-grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: var(--lx-emerald);
+}
+
+/* 3. GLOBAL POLISH ---------------------------------------------------- */
+html {
+  scroll-padding-top: 88px;
+}
+html,
+body {
+  overflow-x: clip;
+}
+body {
+  color: var(--lx-ink);
+  background: var(--lx-white);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+::selection {
+  background: var(--lx-mint);
+  color: var(--lx-deep);
+}
+:where(a, button, summary, input, select, textarea):focus-visible {
+  outline: 2px solid var(--lx-emerald-bright);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+.lx-anchor {
+  display: block;
+  height: 0;
+}
+
+/* Section headings: tighter, more confident, consistent across Tailwind
+   and hand-written sections. */
+main h2,
+#lamen-impact-stories h2,
+#lamen-in-numbers h2,
+#lamen-leadership h2,
+#contact h2 {
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
+/* Every Tailwind gradient highlight now shares one emerald→mint ramp. */
+main h2 .bg-clip-text,
+#lamen-in-numbers h2 .bg-clip-text,
+#contact h2 .bg-clip-text {
+  background-image: var(--lx-grad-text) !important;
+  background-size: 200% 100% !important;
+  animation: lx-text-flow 9s var(--lx-ease-io) infinite alternate;
+}
+@keyframes lx-text-flow {
+  from { background-position: 0% 50%; }
+  to { background-position: 100% 50%; }
+}
+
+/* Primary call-to-action buttons: rich gradient + light sweep. */
+.lx-btn-sheen {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.lx-btn-sheen::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 40%;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.38), transparent);
+  transform: translateX(-120%) skewX(-18deg);
+}
+@media (hover: hover) {
+  .lx-btn-sheen:hover::after {
+    animation: lx-sheen 0.9s var(--lx-ease);
+  }
+}
+
+/* 4. HEADER ----------------------------------------------------------- */
+/* Fixed (and colour-shifting) only when the script can manage its state. */
+html.lx-js .site-header {
+  position: fixed !important;
+  inset: 0 0 auto 0;
+}
+.site-header {
+  transition:
+    background-color var(--lx-t2) var(--lx-ease),
+    box-shadow var(--lx-t2) var(--lx-ease),
+    border-color var(--lx-t2) var(--lx-ease),
+    transform var(--lx-t2) var(--lx-ease);
+  border-bottom-color: rgba(255, 255, 255, 0.12) !important;
+}
+.site-header .nav-wrap {
+  min-height: 76px;
+  transition: min-height var(--lx-t2) var(--lx-ease);
+}
+.site-header .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+.site-header .brand-logo {
+  width: 44px !important;
+  height: 44px !important;
+  padding: 3px;
+  border-radius: 12px;
+  background: radial-gradient(circle at 50% 40%, #0b6a4a, #022419 75%);
+  box-shadow: 0 0 0 1px rgba(185, 240, 213, 0.22), 0 8px 20px -8px rgba(2, 36, 25, 0.6);
+  object-position: center !important;
+  transition: transform var(--lx-t2) var(--lx-ease);
+}
+.site-header .brand:hover .brand-logo {
+  transform: rotate(-6deg) scale(1.04);
+}
+.brand-word {
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+  font-family: "DM Sans", Inter, system-ui, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  transition: color var(--lx-t2) var(--lx-ease);
+}
+.brand-word small {
+  margin-top: 5px;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.72;
+}
+.site-header .nav-links a,
+.site-header .achievement-trigger {
+  font-size: 12.5px !important;
+  letter-spacing: 0.01em;
+}
+.site-header .nav-links a::after {
+  background: linear-gradient(90deg, var(--lx-mint-bright), var(--lx-emerald-bright)) !important;
+  height: 2px !important;
+  border-radius: 2px;
+}
+.site-header .nav-cta {
+  background: linear-gradient(135deg, #d9fbe9, #9ff0c6) !important;
+  border-color: transparent !important;
+  border-radius: 999px !important;
+  min-height: 42px !important;
+  padding-inline: 20px !important;
+  color: var(--lx-deep) !important;
+  box-shadow: 0 10px 24px -12px rgba(126, 227, 178, 0.9);
+}
+.site-header .nav-cta:hover {
+  transform: translateY(-2px);
+}
+.site-header .nav-cta .arrow {
+  transition: transform var(--lx-t1) var(--lx-ease);
+}
+.site-header .nav-cta:hover .arrow {
+  transform: translate(2px, -2px);
+}
+
+/* The Achievements trigger reads as part of the light-on-dark bar. */
+.site-header:not(.is-scrolled) .nav-links .achievement-trigger {
+  color: #fff !important;
+  border-color: rgba(255, 255, 255, 0.35) !important;
+  background: transparent !important;
+}
+/* Scrolled: crisp white glass with dark text. */
+.site-header.is-scrolled {
+  background: rgba(255, 255, 255, 0.86) !important;
+  -webkit-backdrop-filter: saturate(1.6) blur(14px) !important;
+  backdrop-filter: saturate(1.6) blur(14px) !important;
+  border-bottom-color: var(--lx-line) !important;
+  box-shadow: 0 10px 30px -18px rgba(3, 61, 45, 0.35) !important;
+}
+.site-header.is-scrolled .nav-wrap {
+  min-height: 64px;
+}
+.site-header.is-scrolled .brand-word,
+.site-header.is-scrolled .nav-links a,
+.site-header.is-scrolled .nav-login,
+.site-header.is-scrolled .achievement-trigger {
+  color: var(--lx-ink) !important;
+}
+.site-header.is-scrolled .nav-links a:hover,
+.site-header.is-scrolled .nav-login:hover {
+  color: var(--lx-emerald) !important;
+}
+.site-header.is-scrolled .achievement-trigger {
+  border-color: var(--lx-line) !important;
+}
+.site-header.is-scrolled .nav-cta {
+  background: var(--lx-grad-cta) !important;
+  color: #fff !important;
+  box-shadow: 0 10px 24px -12px rgba(7, 132, 91, 0.8);
+}
+.site-header.is-scrolled .menu-toggle {
+  color: var(--lx-deep) !important;
+  background: var(--lx-mist) !important;
+  border-color: var(--lx-line) !important;
+}
+.site-header.is-hidden {
+  transform: translateY(-100%);
+}
+.site-header.menu-open {
+  transform: none;
+}
+
+/* Scroll progress hairline. */
+.lx-progress {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 2px;
+  width: 100%;
+  transform-origin: left;
+  transform: scaleX(var(--lx-progress, 0));
+  background: linear-gradient(90deg, var(--lx-emerald), var(--lx-mint-bright));
+  pointer-events: none;
+}
+
+/* Mobile menu: a soft white sheet that drops in. */
+.site-header .mobile-menu {
+  margin: 0 12px;
+  padding: 14px !important;
+  border: 1px solid var(--lx-line) !important;
+  border-radius: 20px;
+  background:
+    radial-gradient(120% 60% at 100% 0%, rgba(185, 240, 213, 0.55), transparent 60%),
+    #fff !important;
+  box-shadow: var(--lx-shadow-lg) !important;
+  animation: lx-menu-in 0.45s var(--lx-ease);
+}
+@keyframes lx-menu-in {
+  from { opacity: 0; transform: translateY(-10px) scale(0.98); }
+}
+.site-header .mobile-menu > a,
+.site-header .mobile-menu > button {
+  min-height: 46px;
+  padding: 12px 14px !important;
+  border-radius: 12px !important;
+  font-size: 15px !important;
+}
+.site-header .mobile-menu > .mobile-cta {
+  justify-content: center !important;
+  gap: 8px;
+  background: var(--lx-grad-cta) !important;
+}
+
+/* 5. HERO ------------------------------------------------------------- */
+.hero.hero-premium {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  min-height: max(700px, 100svh);
+  padding: 128px clamp(20px, 5vw, 72px) 132px;
+  text-align: left;
+  background: var(--lx-night);
+}
+.hero.hero-premium .hero-background {
+  background-image: url("assets/optimized/afghan-valley-2200.jpg");
+  background-position: center 40%;
+  transform: translate3d(0, var(--lx-hero-shift, 0px), 0) scale(1.08);
+  animation: lx-hero-bg 2.2s var(--lx-ease) both;
+  will-change: transform;
+}
+@keyframes lx-hero-bg {
+  from { opacity: 0; filter: saturate(0.6); scale: 1.1; }
+  to { opacity: 1; filter: none; scale: 1; }
+}
+.hero.hero-premium .hero-overlay {
+  background:
+    linear-gradient(90deg, rgba(2, 30, 21, 0.92) 0%, rgba(3, 48, 34, 0.74) 38%, rgba(3, 48, 34, 0.25) 72%, rgba(2, 30, 21, 0.4) 100%),
+    linear-gradient(180deg, rgba(2, 30, 21, 0.55) 0%, transparent 28%, transparent 62%, rgba(2, 30, 21, 0.92) 100%);
+}
+/* Slow emerald light drifting across the landscape. */
+.hero-aurora {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  animation: lx-fade-in 2.4s 0.4s var(--lx-ease) both;
+}
+.hero-aurora span {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(10px);
+  will-change: transform;
+}
+.hero-aurora span:nth-child(1) {
+  width: 60vw;
+  height: 60vw;
+  left: -18vw;
+  top: -22vw;
+  background: radial-gradient(circle, rgba(16, 168, 117, 0.42), transparent 62%);
+  animation: lx-drift-a 20s var(--lx-ease-io) infinite;
+}
+.hero-aurora span:nth-child(2) {
+  width: 46vw;
+  height: 46vw;
+  right: -10vw;
+  bottom: -18vw;
+  background: radial-gradient(circle, rgba(126, 227, 178, 0.3), transparent 62%);
+  animation: lx-drift-b 24s var(--lx-ease-io) infinite;
+}
+.hero-aurora span:nth-child(3) {
+  width: 30vw;
+  height: 30vw;
+  left: 34vw;
+  top: 30%;
+  background: radial-gradient(circle, rgba(7, 132, 91, 0.35), transparent 62%);
+  animation: lx-drift-a 16s -6s var(--lx-ease-io) infinite;
+}
+/* Fine architectural grid for depth. */
+.hero-lines {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image:
+    linear-gradient(rgba(185, 240, 213, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(185, 240, 213, 0.07) 1px, transparent 1px);
+  background-size: 96px 96px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 30% 45%, #000 20%, transparent 75%);
+  mask-image: radial-gradient(ellipse 70% 60% at 30% 45%, #000 20%, transparent 75%);
+}
+@keyframes lx-fade-in {
+  from { opacity: 0; }
+}
+
+.hero-shell {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+  align-items: center;
+  gap: clamp(32px, 5vw, 88px);
+  width: min(100%, 1320px);
+  margin: 0 auto;
+}
+.hero.hero-premium .hero-content {
+  align-items: flex-start;
+  max-width: 760px;
+  margin: 0;
+  animation: none;
+}
+.hero.hero-premium .hero-eyebrow {
+  margin-bottom: 30px;
+  background: linear-gradient(90deg, rgba(16, 168, 117, 0.35), rgba(16, 168, 117, 0.08));
+  border-color: rgba(185, 240, 213, 0.32);
+  animation: lx-hero-rise 0.9s 0.15s var(--lx-ease) both;
+}
+.hero.hero-premium .eyebrow-dot {
+  animation: lx-pulse 2.6s ease-in-out infinite;
+}
+@keyframes lx-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(126, 227, 178, 0.7); }
+  50% { box-shadow: 0 0 0 7px rgba(126, 227, 178, 0); }
+}
+.hero.hero-premium #hero-title {
+  animation: none;
+  background-image: none;
+  color: #fff;
+  -webkit-text-fill-color: #fff;
+}
+.hero.hero-premium h1 {
+  display: block;
+  width: 100%;
+  max-width: none;
+  color: #fff;
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  font-family: "DM Sans", Inter, system-ui, sans-serif;
+  font-size: clamp(46px, 7.4vw, 112px);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+}
+/* Each headline line is revealed from behind its own mask. */
+.hero-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+.hero-line > span {
+  display: inline-block;
+  animation: lx-line-up 1.15s var(--lx-ease) both;
+}
+.hero-line:nth-child(1) > span { animation-delay: 0.28s; }
+.hero-line:nth-child(2) > span { animation-delay: 0.4s; }
+.hero-line:nth-child(3) > span { animation-delay: 0.52s; }
+@keyframes lx-line-up {
+  from { transform: translate3d(0, 105%, 0); }
+  to { transform: none; }
+}
+.hero.hero-premium #hero-title .gradient-text {
+  background: linear-gradient(100deg, #ffffff 0%, #c9f7df 30%, #6fe0aa 65%, #14b880 100%) !important;
+  background-size: 200% 100% !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: #6fe0aa !important;
+  animation:
+    lx-line-up 1.15s 0.52s var(--lx-ease) both,
+    lx-text-flow 7s 1.6s var(--lx-ease-io) infinite alternate;
+}
+.hero.hero-premium .hero-description {
+  margin: 30px 0 0;
+  max-width: 560px;
+  color: rgba(236, 253, 244, 0.86);
+  font-size: clamp(16px, 1.35vw, 19px);
+  line-height: 1.75;
+  animation: lx-hero-rise 1s 0.7s var(--lx-ease) both;
+}
+.hero.hero-premium .hero-buttons {
+  justify-content: flex-start;
+  margin-top: 38px;
+  gap: 14px;
+}
+.hero.hero-premium .hero-buttons > a:nth-child(1) {
+  animation: lx-hero-rise 0.9s 0.85s var(--lx-ease) both;
+}
+.hero.hero-premium .hero-buttons > a:nth-child(2) {
+  animation: lx-hero-rise 0.9s 0.95s var(--lx-ease) both;
+}
+.hero.hero-centered.hero-premium .hero-buttons .btn-primary {
+  min-height: 56px;
+  padding: 0 28px;
+  border: 0 !important;
+  border-radius: 999px;
+  color: var(--lx-deep) !important;
+  background: linear-gradient(135deg, #ffffff 0%, #d9fbe9 45%, #8eeabd 100%) !important;
+  background-size: 160% 100% !important;
+  box-shadow: 0 18px 40px -16px rgba(126, 227, 178, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  transition:
+    transform var(--lx-t1) var(--lx-ease),
+    box-shadow var(--lx-t1) var(--lx-ease),
+    background-position var(--lx-t2) var(--lx-ease);
+}
+.hero.hero-centered.hero-premium .hero-buttons .btn-primary:hover {
+  transform: translateY(-3px);
+  background-position: 100% 0 !important;
+  box-shadow: 0 24px 50px -16px rgba(126, 227, 178, 0.95);
+}
+.hero.hero-premium .btn-secondary {
+  min-height: 56px;
+  padding: 0 26px;
+  border-radius: 999px;
+  border: 1px solid rgba(185, 240, 213, 0.4);
+  background: rgba(255, 255, 255, 0.06);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  transition:
+    background var(--lx-t1) var(--lx-ease),
+    border-color var(--lx-t1) var(--lx-ease),
+    transform var(--lx-t1) var(--lx-ease);
+}
+.hero.hero-premium .btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(185, 240, 213, 0.75);
+  transform: translateY(-3px);
+}
+.hero.hero-premium .arrow {
+  display: inline-block;
+  transition: transform var(--lx-t1) var(--lx-ease);
+}
+.hero.hero-premium .btn-primary:hover .arrow {
+  transform: translate(3px, -3px);
+}
+.hero.hero-premium .btn-secondary:hover .arrow {
+  transform: translateX(4px);
+}
+.hero.hero-premium .hero-note {
+  justify-content: flex-start;
+  margin-top: 26px;
+  color: rgba(214, 245, 228, 0.78);
+  animation: lx-hero-rise 0.9s 1.05s var(--lx-ease) both;
+}
+@keyframes lx-hero-rise {
+  from { opacity: 0; transform: translate3d(0, 26px, 0); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Layered photograph with an opening clip reveal. */
+.hero-visual {
+  position: relative;
+  margin: 0;
+  justify-self: end;
+  width: min(100%, 440px);
+  aspect-ratio: 4 / 5;
+  transform: translate3d(0, var(--lx-visual-shift, 0px), 0);
+}
+.hero-visual::before {
+  content: "";
+  position: absolute;
+  inset: -18% -22%;
+  z-index: -1;
+  background: radial-gradient(circle at 50% 50%, rgba(16, 168, 117, 0.5), transparent 60%);
+  filter: blur(6px);
+  animation: lx-fade-in 2s 0.9s var(--lx-ease) both;
+}
+.hero-visual-frame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 220px 220px 28px 28px;
+  box-shadow: 0 50px 100px -40px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(185, 240, 213, 0.25);
+  animation: lx-arch-open 1.5s 0.45s var(--lx-ease) both;
+}
+.hero-visual-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, transparent 45%, rgba(2, 36, 25, 0.85) 100%),
+    linear-gradient(135deg, rgba(16, 168, 117, 0.25), transparent 50%);
+}
+.hero-visual-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 45% 50%;
+  animation: lx-img-settle 2s 0.45s var(--lx-ease) both;
+  transition: transform 1.2s var(--lx-ease);
+}
+.hero-visual:hover .hero-visual-frame img {
+  transform: scale(1.05);
+}
+@keyframes lx-arch-open {
+  from { clip-path: inset(100% 0 0 0 round 220px 220px 28px 28px); }
+  to { clip-path: inset(0 0 0 0 round 220px 220px 28px 28px); }
+}
+@keyframes lx-img-settle {
+  from { transform: scale(1.3); }
+  to { transform: scale(1); }
+}
+/* Thin concentric arch outline echoing the frame. */
+.hero-visual::after {
+  content: "";
+  position: absolute;
+  inset: -14px;
+  border: 1px solid rgba(185, 240, 213, 0.28);
+  border-radius: 234px 234px 40px 40px;
+  pointer-events: none;
+  animation: lx-fade-in 1.4s 1.2s var(--lx-ease) both;
+}
+.hero-visual-caption {
+  position: absolute;
+  left: 26px;
+  right: 26px;
+  bottom: 24px;
+  z-index: 2;
+  color: rgba(236, 253, 244, 0.85);
+  font-size: 12px;
+  line-height: 1.6;
+  animation: lx-hero-rise 0.9s 1.25s var(--lx-ease) both;
+}
+.hero-visual-caption span {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--lx-mint);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+.hero-fact {
+  position: absolute;
+  left: -64px;
+  top: 16%;
+  z-index: 3;
+  display: grid;
+  gap: 2px;
+  min-width: 190px;
+  padding: 18px 22px;
+  border-radius: 20px;
+  color: var(--lx-ink);
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.96), rgba(230, 250, 239, 0.92));
+  box-shadow: 0 30px 60px -24px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.6);
+  animation: lx-fact-in 1.1s 1.15s var(--lx-ease) both, lx-float 7s 2.4s ease-in-out infinite;
+}
+.hero-fact-label {
+  color: var(--lx-emerald);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.hero-fact strong {
+  font-family: "DM Sans", Inter, sans-serif;
+  font-size: 44px;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  background: var(--lx-grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero-fact-sub {
+  color: var(--lx-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+@keyframes lx-fact-in {
+  from { opacity: 0; transform: translate3d(-24px, 18px, 0) scale(0.92); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes lx-float {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -10px; }
+}
+
+.hero.hero-premium .hero-foot {
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+  width: min(calc(100% - 2 * clamp(20px, 5vw, 72px)), 1320px);
+  justify-content: space-between;
+  border-top: 1px solid rgba(185, 240, 213, 0.18);
+  animation: lx-fade-in 1.2s 1.3s var(--lx-ease) both;
+}
+.hero.hero-premium .trust-item {
+  color: rgba(220, 247, 232, 0.82);
+}
+.hero.hero-premium .foot-label {
+  color: var(--lx-mint);
+}
+.hero.motion-paused .hero-aurora span,
+.hero.motion-paused .hero-fact {
+  animation-play-state: paused;
+}
+
+/* 6. PURPOSE & PRODUCTS ----------------------------------------------- */
+#lamen-purpose {
+  background:
+    radial-gradient(50% 60% at 100% 0%, rgba(185, 240, 213, 0.55), transparent 70%),
+    radial-gradient(40% 40% at 0% 100%, rgba(242, 251, 246, 1), transparent 70%),
+    #fff !important;
+}
+#lamen-purpose h2 {
+  font-family: "DM Sans", Inter, sans-serif;
+  letter-spacing: -0.05em;
+}
+#lamen-purpose .grid > div > .grid > div > span {
+  background: var(--lx-grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 30px;
+}
+#lamen-purpose a.group {
+  border-radius: 999px !important;
+  background: var(--lx-grad-cta) !important;
+  box-shadow: 0 18px 36px -16px rgba(7, 132, 91, 0.75) !important;
+}
+#lamen-purpose a.group:hover {
+  background: var(--lx-grad-cta-hover) !important;
+}
+#lamen-purpose .group.relative.overflow-hidden {
+  border-radius: 200px 200px 32px 32px !important;
+}
+#lamen-purpose .group.relative.overflow-hidden img {
+  transform: scale(var(--lx-par-scale, 1.06)) translate3d(0, var(--lx-par, 0px), 0);
+}
+#lamen-purpose .group.relative.overflow-hidden > div[aria-hidden="true"] {
+  background: linear-gradient(0deg, rgba(3, 61, 45, 0.92) 0%, rgba(6, 75, 54, 0.35) 40%, transparent 65%) !important;
+}
+#lamen-purpose [class*="rounded-tr-[2rem]"] {
+  border-color: rgba(16, 168, 117, 0.55) !important;
+  border-radius: 0 120px 0 0 !important;
+}
+
+/* Products: mint atmosphere, sharper cards, animated gradient edge. */
+#products.lp-products {
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(60% 50% at 85% 10%, rgba(126, 227, 178, 0.35), transparent 70%),
+    radial-gradient(50% 50% at 0% 90%, rgba(16, 168, 117, 0.12), transparent 70%),
+    linear-gradient(180deg, #ffffff 0%, var(--lx-mist) 18%, var(--lx-mist) 82%, #ffffff 100%) !important;
+}
+#products .lp-product {
+  position: relative;
+  transition:
+    transform var(--lx-t2) var(--lx-ease),
+    box-shadow var(--lx-t2) var(--lx-ease) !important;
+}
+#products .lp-product::before {
+  content: "";
+  position: absolute;
+  inset: -1.5px;
+  z-index: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(from var(--lx-angle), transparent 0 55%, var(--lx-mint-bright) 70%, var(--lx-emerald-bright) 80%, transparent 92%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--lx-t2) var(--lx-ease);
+}
+@media (hover: hover) {
+  #products .lp-product:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--lx-shadow-lg);
+  }
+  #products .lp-product:hover::before {
+    opacity: 1;
+    animation: lx-border-spin 4s linear infinite;
+  }
+}
+#products .lp-product[open]::before {
+  opacity: 1;
+}
+#products .lp-product summary {
+  background:
+    radial-gradient(90% 70% at 100% 0%, rgba(16, 168, 117, 0.45), transparent 60%),
+    linear-gradient(150deg, #0a6a4a 0%, #054432 55%, #022a1f 100%) !important;
+}
+#products .lp-product:nth-child(2) summary {
+  background:
+    radial-gradient(90% 70% at 0% 0%, rgba(126, 227, 178, 0.35), transparent 60%),
+    linear-gradient(150deg, #0d7a55 0%, #06513a 55%, #033324 100%) !important;
+}
+#products .lp-product:nth-child(3) summary {
+  background:
+    radial-gradient(90% 70% at 100% 100%, rgba(16, 168, 117, 0.4), transparent 60%),
+    linear-gradient(150deg, #075e47 0%, #04463a 55%, #022c25 100%) !important;
+}
+#products .lp-product:nth-child(4) summary {
+  background:
+    radial-gradient(90% 70% at 0% 100%, rgba(185, 240, 213, 0.3), transparent 60%),
+    linear-gradient(150deg, #1d7a50 0%, #0e5236 55%, #063322 100%) !important;
+}
+
+/* 7. JOURNEY & IMPACT ------------------------------------------------- */
+#journey {
+  background:
+    radial-gradient(45% 35% at 100% 0%, rgba(185, 240, 213, 0.5), transparent 70%),
+    linear-gradient(180deg, #ffffff 0%, var(--lx-mist) 45%, #ffffff 100%) !important;
+}
+/* Timeline spine fills as the visitor scrolls through it. */
+#journey .relative > .absolute.w-px {
+  width: 2px !important;
+  background: rgba(7, 132, 91, 0.12) !important;
+  overflow: hidden;
+}
+#journey .relative > .absolute.w-px::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform-origin: top;
+  transform: scaleY(var(--lx-spine, 1));
+  background: linear-gradient(180deg, var(--lx-mint-bright), var(--lx-emerald) 50%, var(--lx-forest));
+}
+html.lx-motion #journey .relative > .absolute.w-px::after {
+  transform: scaleY(var(--lx-spine, 0));
+}
+#journey [class*="text-[#c0d8ca]"] {
+  background: linear-gradient(180deg, var(--lx-emerald) 0%, var(--lx-mint-bright) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-family: "DM Sans", Inter, sans-serif;
+}
+#journey article.group {
+  transition:
+    transform var(--lx-t2) var(--lx-ease),
+    box-shadow var(--lx-t2) var(--lx-ease) !important;
+}
+#journey article.group:hover {
+  box-shadow: var(--lx-shadow-md) !important;
+}
+#journey article.group > .absolute.rounded-bl-full {
+  background: radial-gradient(circle at 100% 0%, rgba(126, 227, 178, 0.55), rgba(242, 251, 246, 0.6) 60%) !important;
+}
+
+/* Picks up the journey's deepest mint and settles back to white. */
+#impact.impact-section {
+  background: linear-gradient(180deg, #dcf3e6 0%, #ffffff 26%, #ffffff 70%, var(--lx-mist) 100%) !important;
+}
+.impact-title span {
+  background: var(--lx-grad-text) !important;
+  background-size: 200% 100% !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  animation: lx-text-flow 9s var(--lx-ease-io) infinite alternate;
+}
+.impact-kicker {
+  color: var(--lx-emerald) !important;
+}
+.impact-feature,
+.impact-card {
+  isolation: isolate;
+}
+.impact-feature-image,
+.impact-card-image {
+  transition: transform 1.2s var(--lx-ease) !important;
+}
+@media (hover: hover) {
+  .impact-feature:hover .impact-feature-image,
+  .impact-card:hover .impact-card-image {
+    transform: scale(1.06) !important;
+  }
+}
+.impact-feature::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(3, 61, 45, 0) 30%, rgba(3, 61, 45, 0.88) 100%),
+    linear-gradient(120deg, rgba(16, 168, 117, 0.28), transparent 45%);
+}
+.impact-feature-content {
+  z-index: 1;
+}
+/* Keep card copy legible over bright photographs. */
+.impact-card:before {
+  background:
+    linear-gradient(0deg, rgba(2, 36, 25, 0.92) 0%, rgba(3, 61, 45, 0.6) 45%, rgba(3, 61, 45, 0.12) 100%),
+    linear-gradient(120deg, rgba(16, 168, 117, 0.25), transparent 50%) !important;
+  opacity: 1 !important;
+}
+.impact-cta {
+  background: var(--lx-grad-cta) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+}
+
+/* 8. PROCESS & TRUST -------------------------------------------------- */
+/* The process section's dark stage lives in 10b. */
+.process-complete .process-kicker {
+  color: var(--lx-emerald) !important;
+}
+
+#trust {
+  background:
+    radial-gradient(50% 40% at 100% 0%, rgba(126, 227, 178, 0.3), transparent 70%),
+    linear-gradient(180deg, #ffffff 0%, var(--lx-mist) 100%) !important;
+}
+#trust .bg-\[\#126344\] {
+  isolation: isolate;
+  background: var(--lx-grad-deep) !important;
+  box-shadow: var(--lx-shadow-lg);
+}
+#trust .bg-\[\#126344\] > .relative {
+  z-index: 1;
+}
+#trust article.group {
+  transition:
+    transform var(--lx-t2) var(--lx-ease),
+    box-shadow var(--lx-t2) var(--lx-ease),
+    border-color var(--lx-t2) var(--lx-ease) !important;
+}
+#trust article.group::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--lx-emerald), var(--lx-mint-bright));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--lx-t2) var(--lx-ease);
+}
+#trust article.group:hover::after,
+#trust article.group:focus-within::after {
+  transform: scaleX(1);
+}
+
+/* 9. DATA, STORIES & LEADERSHIP --------------------------------------- */
+#lamen-branches-map {
+  background:
+    radial-gradient(50% 40% at 50% 0%, rgba(185, 240, 213, 0.45), transparent 70%),
+    linear-gradient(180deg, var(--lx-mist) 0%, #ffffff 100%) !important;
+}
+#lamen-impact-stories {
+  background: linear-gradient(180deg, #ffffff 0%, #ffffff 70%, var(--lx-mist) 100%) !important;
+}
+#lamen-impact-stories img {
+  transition: transform 1.2s var(--lx-ease) !important;
+}
+
+/* "At a glance" becomes the mid-page emerald feature section. */
+#lamen-in-numbers {
+  background: var(--lx-grad-deep) !important;
+  color: #fff !important;
+}
+#lamen-in-numbers > [aria-hidden="true"] > div:nth-child(-n + 2) {
+  display: none;
+}
+#lamen-in-numbers > [aria-hidden="true"] > div:nth-child(3) {
+  opacity: 0.08 !important;
+  filter: invert(1);
+}
+#lamen-in-numbers header .rounded-full.border {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(185, 240, 213, 0.25) !important;
+}
+#lamen-in-numbers header .text-emerald-900 {
+  color: var(--lx-mint) !important;
+}
+#lamen-in-numbers h2 {
+  color: #fff;
+}
+#lamen-in-numbers h2 .bg-clip-text {
+  background-image: var(--lx-grad-text-light) !important;
+}
+#lamen-in-numbers header p {
+  color: rgba(220, 247, 232, 0.78) !important;
+}
+#lamen-in-numbers header > a {
+  background: linear-gradient(135deg, #ffffff, #c9f7df) !important;
+  color: var(--lx-deep) !important;
+}
+#lamen-in-numbers header > a > span:last-child {
+  background: var(--lx-grad-cta) !important;
+  color: #fff !important;
+}
+#lamen-in-numbers .bg-\[\#103c2a\] {
+  background:
+    radial-gradient(100% 70% at 100% 0%, rgba(126, 227, 178, 0.45), transparent 60%),
+    linear-gradient(160deg, #10a875 0%, #07845b 40%, #055b40 100%) !important;
+  box-shadow: 0 0 0 1px rgba(185, 240, 213, 0.28), var(--lx-shadow-lg);
+}
+#lamen-in-numbers .text-7xl {
+  background: var(--lx-grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-variant-numeric: tabular-nums;
+}
+#lamen-in-numbers article {
+  transition:
+    transform var(--lx-t2) var(--lx-ease),
+    box-shadow var(--lx-t2) var(--lx-ease),
+    background-color var(--lx-t2) var(--lx-ease) !important;
+}
+#lamen-in-numbers article:hover {
+  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.6);
+}
+#lamen-in-numbers > div > footer {
+  border-color: rgba(185, 240, 213, 0.18) !important;
+}
+#lamen-in-numbers > div > footer p,
+#lamen-in-numbers > div > footer > span {
+  color: rgba(220, 247, 232, 0.7) !important;
+}
+#lamen-in-numbers > div > footer a {
+  color: var(--lx-mint) !important;
+  text-decoration-color: rgba(185, 240, 213, 0.35) !important;
+}
+#lamen-in-numbers > div > footer a:hover {
+  color: #fff !important;
+}
+
+#lamen-leadership {
+  background:
+    radial-gradient(45% 35% at 0% 0%, rgba(185, 240, 213, 0.45), transparent 70%),
+    linear-gradient(180deg, #ffffff 0%, var(--lx-mist) 100%) !important;
+}
+.ll-team-banner {
+  border-radius: 32px !important;
+  box-shadow: var(--lx-shadow-lg) !important;
+}
+.ll-team-banner > img {
+  transition: transform 1.6s var(--lx-ease), filter var(--lx-t2) var(--lx-ease) !important;
+}
+@media (hover: hover) {
+  .ll-team-banner:hover > img {
+    transform: scale(1.03);
+    filter: none !important;
+  }
+}
+.ll-team-banner-shade {
+  background:
+    linear-gradient(90deg, rgba(2, 36, 25, 0.9) 0%, rgba(4, 64, 47, 0.62) 34%, rgba(7, 132, 91, 0.1) 70%, transparent 100%),
+    linear-gradient(0deg, rgba(2, 36, 25, 0.6), transparent 40%) !important;
+}
+.ll-team-banner-content h3 em,
+.ll-team-banner-content h3 span {
+  background: var(--lx-grad-text-light);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 10. CONTACT & FOOTER ------------------------------------------------ */
+#contact {
+  background:
+    radial-gradient(50% 40% at 100% 0%, rgba(185, 240, 213, 0.5), transparent 70%),
+    linear-gradient(180deg, var(--lx-mist) 0%, #ffffff 100%) !important;
+}
+#contact .bg-\[\#0b3827\] {
+  background: var(--lx-grad-deep) !important;
+}
+#contact .bg-\[\#0b3827\] > .relative {
+  z-index: 1;
+}
+#contact input,
+#contact select,
+#contact textarea {
+  transition:
+    border-color var(--lx-t1) var(--lx-ease),
+    box-shadow var(--lx-t1) var(--lx-ease),
+    background-color var(--lx-t1) var(--lx-ease);
+}
+#contact input:focus,
+#contact select:focus,
+#contact textarea:focus {
+  border-color: var(--lx-emerald-bright) !important;
+  box-shadow: 0 0 0 4px rgba(16, 168, 117, 0.15) !important;
+  background-color: #fff !important;
+}
+#contact button[type="submit"] {
+  background: var(--lx-grad-cta) !important;
+  border-radius: 999px !important;
+  box-shadow: 0 18px 36px -16px rgba(7, 132, 91, 0.75);
+  transition: transform var(--lx-t1) var(--lx-ease), box-shadow var(--lx-t1) var(--lx-ease) !important;
+}
+#contact button[type="submit"]:hover {
+  transform: translateY(-2px);
+  background: var(--lx-grad-cta-hover) !important;
+}
+
+#site-footer {
+  isolation: isolate;
+  background:
+    radial-gradient(70% 60% at 100% 0%, rgba(16, 168, 117, 0.35), transparent 60%),
+    radial-gradient(60% 60% at 0% 100%, rgba(126, 227, 178, 0.12), transparent 60%),
+    linear-gradient(170deg, #054a35 0%, #033123 50%, #021d15 100%) !important;
+}
+#site-footer::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  z-index: 1;
+  background: linear-gradient(90deg, transparent, var(--lx-mint-bright), transparent);
+}
+#site-footer > .relative {
+  z-index: 1;
+}
+/* Oversized brand watermark. */
+#site-footer::after {
+  content: "LAMEN";
+  position: absolute;
+  /* Centred on the footer's full width: left/right 0 + text-align, so the
+     wordmark tracks the container at every breakpoint. */
+  left: 0;
+  right: 0;
+  bottom: -0.16em;
+  z-index: 0;
+  text-align: center;
+  white-space: nowrap;
+  font-family: "DM Sans", Inter, sans-serif;
+  font-size: clamp(88px, 21vw, 330px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.06em;
+  /* Negative tracking is also applied after the final letter; matching
+     padding restores the glyphs' true optical centre. */
+  padding-right: 0.06em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(185, 240, 213, 0.12);
+  pointer-events: none;
+}
+#site-footer ul a,
+#site-footer nav a {
+  position: relative;
+  display: inline-block;
+  transition: color var(--lx-t1) var(--lx-ease), transform var(--lx-t1) var(--lx-ease);
+}
+#site-footer ul a::after,
+#site-footer nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--lx-t2) var(--lx-ease);
+}
+#site-footer ul a:hover::after,
+#site-footer nav a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+#site-footer ul a:hover {
+  transform: translateX(3px);
+}
+
+/* Credits and gallery link continue the footer instead of trailing it. */
+body > .photo-source-notes {
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 18px max(20px, calc((100% - 1216px) / 2)) !important;
+  background: #021d15;
+  color: rgba(220, 247, 232, 0.6) !important;
+  border-top: 1px solid rgba(185, 240, 213, 0.08);
+}
+body > .photo-source-notes a {
+  color: var(--lx-mint) !important;
+}
+.lx-gallery-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 22px 20px;
+  color: var(--lx-deep);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  background: linear-gradient(90deg, #b9f0d5, #7ee3b2, #b9f0d5);
+  background-size: 200% 100%;
+  transition: background-position 1s var(--lx-ease), letter-spacing var(--lx-t2) var(--lx-ease);
+}
+.lx-gallery-strip:hover {
+  background-position: 100% 0;
+  letter-spacing: 0.02em;
+}
+
+/* 10b. ART DIRECTION — second pass ------------------------------------
+   Targets the sections that read weakest in the rendered audit: a deeper
+   hero, a dark process "stage", distinct product identities, a journey
+   with narrative progression, and sheet-like transitions into dark areas. */
+
+/* Sections contain their own stacking so dark "sheets" can overlap the
+   previous section's lower edge cleanly. */
+main > section,
+body > section {
+  isolation: isolate;
+}
+#how-it-works,
+#lamen-in-numbers,
+#site-footer {
+  position: relative;
+  z-index: 1;
+  margin-top: calc(-1 * var(--lx-sheet));
+  border-radius: var(--lx-sheet) var(--lx-sheet) 0 0;
+  box-shadow: 0 -30px 60px -40px rgba(3, 61, 45, 0.55);
+}
+:root {
+  --lx-sheet: clamp(28px, 4vw, 56px);
+}
+
+/* Hero depth: second photograph, pointer parallax, cinematic scroll-out. */
+.hero.hero-premium .hero-content {
+  translate: 0 var(--lx-hero-exit, 0px);
+  opacity: var(--lx-hero-fade, 1);
+}
+.hero-visual-frame {
+  translate: calc(var(--lx-px, 0) * -10px) calc(var(--lx-py, 0) * -8px);
+  transition: translate 0.9s var(--lx-ease);
+}
+.hero-tile {
+  position: absolute;
+  left: -26%;
+  bottom: 9%;
+  z-index: 3;
+  width: 52%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 22px;
+  box-shadow: 0 34px 70px -28px rgba(0, 0, 0, 0.75), 0 0 0 5px rgba(2, 36, 25, 0.55), 0 0 0 6px rgba(185, 240, 213, 0.35);
+  translate: calc(var(--lx-px, 0) * 18px) calc(var(--lx-py, 0) * 14px);
+  transition: translate 0.9s var(--lx-ease);
+  animation: lx-tile-open 1.3s 0.95s var(--lx-ease) both;
+}
+.hero-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: lx-img-settle 1.8s 0.95s var(--lx-ease) both;
+}
+.hero-tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(2, 36, 25, 0.85));
+}
+.hero-tile span {
+  position: absolute;
+  left: 14px;
+  bottom: 12px;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.hero-tile span::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--lx-mint-bright);
+  box-shadow: 0 0 10px var(--lx-mint-bright);
+}
+@keyframes lx-tile-open {
+  from { clip-path: inset(0 100% 0 0 round 22px); }
+  to { clip-path: inset(0 0 0 0 round 22px); }
+}
+.hero-aurora {
+  translate: calc(var(--lx-px, 0) * -24px) calc(var(--lx-py, 0) * -18px);
+  transition: translate 1.2s var(--lx-ease);
+}
+/* Caption moves right to make room for the overlapping tile. */
+.hero-visual-caption {
+  left: auto;
+  width: 58%;
+  right: 22px;
+  text-align: right;
+}
+
+/* Purpose: offset gradient slab behind the arch, badge kept inside it. */
+#lamen-purpose .relative.order-1 {
+  isolation: isolate;
+}
+#lamen-purpose .relative.order-1::before {
+  content: "";
+  position: absolute;
+  inset: 36px -22px -26px 40px;
+  z-index: -1;
+  border-radius: 32px 220px 32px 32px;
+  background:
+    radial-gradient(80% 60% at 100% 0%, rgba(126, 227, 178, 0.75), transparent 60%),
+    linear-gradient(150deg, #10a875 0%, #07845b 45%, #064b36 100%);
+  translate: 0 var(--lx-slab, 0px);
+  box-shadow: var(--lx-shadow-lg);
+}
+#lamen-purpose .group.relative.overflow-hidden {
+  border-radius: 32px 220px 32px 32px !important;
+}
+#lamen-purpose .group.relative.overflow-hidden > .absolute.right-5 {
+  right: auto !important;
+  left: 1.5rem;
+}
+
+/* Products: one luminous "available" lead card, three quieter siblings. */
+@media (min-width: 1051px) {
+  #products .lp-products-grid {
+    grid-template-columns: 1.45fr 1fr 1fr 1fr;
+    align-items: end;
+  }
+  #products .lp-product:first-child {
+    height: 490px;
+  }
+}
+#products .lp-products-grid {
+  counter-reset: lx-product;
+}
+#products .lp-product {
+  counter-increment: lx-product;
+  border: 0 !important;
+}
+/* Oversized ghost numeral gives each card its own typographic anchor. */
+#products .lp-product summary::after {
+  content: counter(lx-product, decimal-leading-zero);
+  position: absolute;
+  right: -6px;
+  bottom: 54px;
+  z-index: 0;
+  font-family: "DM Sans", Inter, sans-serif;
+  font-size: 150px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.08em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(185, 240, 213, 0.16);
+  pointer-events: none;
+}
+#products .lp-product .lp-product-top,
+#products .lp-product .lp-product-title,
+#products .lp-product .lp-icon-scene {
+  z-index: 1;
+}
+#products .lp-product:first-child summary {
+  background:
+    radial-gradient(70% 55% at 85% 8%, rgba(185, 240, 213, 0.75), transparent 60%),
+    radial-gradient(60% 50% at 0% 100%, rgba(2, 36, 25, 0.5), transparent 70%),
+    linear-gradient(155deg, #19c48c 0%, #0b9a6b 38%, #06694a 75%, #044a35 100%) !important;
+  box-shadow: 0 40px 80px -36px rgba(7, 132, 91, 0.9) !important;
+}
+#products .lp-product:first-child::before {
+  opacity: 1;
+  animation: lx-border-spin 6s linear infinite;
+}
+#products .lp-product:first-child summary::after {
+  -webkit-text-stroke-color: rgba(255, 255, 255, 0.3);
+  font-size: 190px;
+}
+#products .lp-product:first-child .lp-icon-scene {
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.28), transparent 70%) !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+}
+#products .lp-product:first-child .lp-product-title strong {
+  font-size: clamp(30px, 2.8vw, 42px);
+}
+#products .lp-available {
+  position: relative;
+  background: #fff !important;
+  color: var(--lx-deep) !important;
+  font-weight: 800;
+  padding-left: 20px !important;
+}
+#products .lp-available::before {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  border-radius: 50%;
+  background: var(--lx-emerald-bright);
+  animation: lx-pulse 2.4s ease-in-out infinite;
+}
+/* Unavailable products: deeper, calmer, with a fine diagonal texture. */
+#products .lp-product:not(:first-child) summary {
+  background-blend-mode: normal;
+}
+#products .lp-product:not(:first-child) .lp-cover-shade {
+  background:
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 9px),
+    linear-gradient(180deg, transparent 35%, rgba(2, 30, 21, 0.55)) !important;
+}
+#products .lp-product:not(:first-child) .lp-icon-scene {
+  opacity: 0.75;
+}
+
+/* Journey: a narrative that deepens in colour as the years advance. */
+#journey {
+  background:
+    radial-gradient(40% 18% at 100% 4%, rgba(185, 240, 213, 0.6), transparent 70%),
+    radial-gradient(45% 16% at 0% 40%, rgba(185, 240, 213, 0.45), transparent 70%),
+    radial-gradient(50% 18% at 100% 75%, rgba(126, 227, 178, 0.35), transparent 70%),
+    linear-gradient(180deg, #ffffff 0%, #f6fcf9 25%, #eaf8f0 60%, #dcf3e6 100%) !important;
+}
+#journey [class*="text-3xl"][class*="text-[#173e2e]"][class*="tracking-[-0.05em]"] {
+  background: linear-gradient(100deg, var(--lx-forest), var(--lx-emerald) 60%, var(--lx-emerald-bright));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-family: "DM Sans", Inter, sans-serif;
+  font-size: clamp(32px, 3.4vw, 46px);
+}
+#journey article.group:not([class*="bg-[#"]) {
+  border-top: 0 !important;
+}
+#journey article.group:not([class*="bg-[#"])::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  z-index: 1;
+  background: linear-gradient(90deg, var(--lx-emerald), var(--lx-mint-bright), transparent);
+  transform-origin: left;
+  transform: scaleX(0.25);
+  transition: transform 1.1s var(--lx-ease);
+}
+#journey .lx-reached article.group::before,
+#journey article.group:hover::before {
+  transform: scaleX(1);
+}
+/* Timeline nodes light up as the visitor reaches each chapter. */
+#journey [class*="border-[5px]"] {
+  transition:
+    transform 0.6s var(--lx-ease),
+    box-shadow 0.6s var(--lx-ease),
+    background-color 0.6s var(--lx-ease);
+}
+#journey .lx-reached [class*="border-[5px]"] {
+  transform: scale(1.15);
+  background: var(--lx-grad-cta) !important;
+  box-shadow: 0 0 0 6px rgba(16, 168, 117, 0.16), 0 0 26px rgba(16, 168, 117, 0.55) !important;
+}
+#journey [class*="bg-[#"][class*="rounded-3xl"],
+#journey [class*="bg-[#"][class*="rounded-[2rem]"] {
+  background: var(--lx-grad-deep) !important;
+}
+
+/* How it works: a deep emerald stage for the card sequence. */
+#how-it-works.process-section {
+  background: var(--lx-grad-deep) !important;
+  color: #fff !important;
+  padding-bottom: 0 !important;
+}
+#how-it-works.process-section::before {
+  background:
+    radial-gradient(40% 25% at 90% 6%, rgba(126, 227, 178, 0.28), transparent 70%),
+    radial-gradient(45% 30% at 0% 40%, rgba(16, 168, 117, 0.3), transparent 70%) !important;
+  opacity: 1 !important;
+}
+#how-it-works .process-intro h2 {
+  color: #fff !important;
+}
+#how-it-works .process-intro h2 span,
+#how-it-works #process-title span {
+  background: var(--lx-grad-text-light) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+#how-it-works .process-intro p {
+  color: rgba(220, 247, 232, 0.8) !important;
+}
+#how-it-works .process-intro .process-kicker {
+  color: var(--lx-mint) !important;
+}
+#how-it-works .process-intro .process-kicker:before {
+  background: var(--lx-mint-bright) !important;
+}
+#how-it-works .process-step {
+  border-color: rgba(185, 240, 213, 0.5) !important;
+  box-shadow: 0 40px 90px -30px rgba(0, 0, 0, 0.6) !important;
+}
+#how-it-works .process-step.is-active {
+  border-color: var(--lx-mint-bright) !important;
+  box-shadow: 0 40px 90px -30px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(126, 227, 178, 0.6) !important;
+}
+#how-it-works .process-step h3 {
+  background: linear-gradient(100deg, var(--lx-deep), var(--lx-emerald));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+/* Illustration panels: luminous mint instead of a muddy grey fade. */
+#how-it-works .process-card-art {
+  background:
+    radial-gradient(70% 60% at 60% 35%, #ffffff 0%, #e4f9ee 45%, #b9f0d5 100%) !important;
+  border-color: rgba(7, 132, 91, 0.18) !important;
+}
+#how-it-works .process-card-art::before {
+  background: linear-gradient(180deg, transparent 62%, rgba(3, 61, 45, 0.82) 100%) !important;
+}
+#how-it-works .process-card-art img {
+  opacity: 1 !important;
+  object-fit: contain !important;
+}
+#how-it-works .process-art-index {
+  background: var(--lx-grad-cta) !important;
+  color: #fff !important;
+}
+/* The staircase finale rises over the stage as a light sheet. */
+#how-it-works .process-complete {
+  /* Full-bleed: break out of the 1240px shell so the sheet spans the viewport. */
+  margin-inline: calc((100% - 100vw) / 2 - 1px);
+  padding-inline: calc((100vw - 100%) / 2 + 1px);
+  border-radius: var(--lx-sheet) var(--lx-sheet) 0 0;
+  background:
+    radial-gradient(40% 40% at 90% 0%, rgba(126, 227, 178, 0.45), transparent 70%),
+    linear-gradient(180deg, #f2fbf6 0%, #ffffff 100%) !important;
+}
+
+/* Impact stories: photographs gain an emerald grade on hover. */
+#lamen-impact-stories img {
+  filter: saturate(0.92);
+}
+@media (hover: hover) {
+  #lamen-impact-stories article:hover img,
+  #lamen-impact-stories figure:hover img {
+    transform: scale(1.04);
+    filter: saturate(1.05);
+  }
+}
+
+/* Branch chips: tactile pills with an emerald fill on hover. */
+#bm-branch-provinces > span {
+  transition:
+    transform var(--lx-t1) var(--lx-ease),
+    background var(--lx-t1) var(--lx-ease),
+    color var(--lx-t1) var(--lx-ease) !important;
+}
+#bm-branch-provinces > span:hover {
+  transform: translateY(-2px);
+  background: var(--lx-grad-cta) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+}
+#bm-branch-provinces > span:hover > span {
+  background: var(--lx-mint) !important;
+}
+
+
+/* "At a glance" panels: solid light surfaces read cleanly on the dark field. */
+#lamen-in-numbers article.bg-white\/85,
+#lamen-in-numbers article.bg-white\/70 {
+  background: linear-gradient(160deg, #ffffff 0%, #f1fbf6 100%) !important;
+  border-color: rgba(185, 240, 213, 0.5) !important;
+}
+
+/* Mobile timeline: keep every chapter beside its node, never in the 40px rail. */
+@media (max-width: 767px) {
+  #journey .space-y-10 > * > :not(:first-child) {
+    grid-column: 2 !important;
+  }
+  #journey .space-y-10 > * > :first-child {
+    grid-row: 1;
+    grid-column: 1;
+  }
+}
+
+/* Mobile hero: the second photograph tucks under the first, inside the gutter. */
+@media (max-width: 960px) {
+  .hero-tile {
+    left: -10px;
+    bottom: -34px;
+    width: 44%;
+  }
+  .hero-visual-caption {
+    width: 52%;
+  }
+  .hero.hero-centered.hero-premium {
+    padding-bottom: 200px;
+  }
+}
+
+/* Mobile staircase: scale the whole illustration to fit rather than crop it. */
+@media (max-width: 640px) {
+  #how-it-works .staircase-svg {
+    min-width: 0 !important;
+    width: 100% !important;
+    left: 0 !important;
+    transform: none !important;
+  }
+}
+
+/* 10c. HOW IT WORKS — step stage ----------------------------------------
+   Active only when lamen-premium.js adds .lx-stage-mode. The steps list
+   becomes a scroll track; one sticky stage shows the current card. */
+#how-it-works {
+  --lx-stage-top: 88px;
+}
+#how-it-works.lx-stage-mode .process-steps {
+  display: block;
+  padding: 0;
+  height: calc(100vh - var(--lx-stage-top) + var(--lx-track-extra, 0px));
+  height: calc(100svh - var(--lx-stage-top) + var(--lx-track-extra, 0px));
+}
+#how-it-works .lx-stage {
+  position: sticky;
+  top: var(--lx-stage-top);
+  height: calc(100vh - var(--lx-stage-top) - 12px);
+  height: calc(100svh - var(--lx-stage-top) - 12px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+}
+#how-it-works .lx-deck {
+  position: relative;
+  display: grid;
+  perspective: 1600px;
+}
+#how-it-works.lx-stage-mode .lx-deck > .process-step {
+  grid-area: 1 / 1;
+  position: relative;
+  top: auto;
+  margin: 0;
+  max-height: calc(100svh - var(--lx-stage-top) - 96px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: none;
+  filter: none;
+  transition: none;
+}
+#how-it-works.lx-stage-mode .lx-deck > .process-step.lx-current {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Door leaves: two halves of the outgoing card, hinged at their outer
+   edges. Each leaf keeps the card's full size and is clipped to one half,
+   so nothing is ever stretched. */
+#how-it-works .lx-doors {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+  perspective: 1500px;
+  perspective-origin: 50% 45%;
+}
+#how-it-works .lx-door {
+  position: absolute;
+  inset: 0;
+  will-change: transform, opacity;
+}
+#how-it-works .lx-door-left {
+  clip-path: inset(0 50% 0 0);
+  transform-origin: 0% 50%;
+}
+#how-it-works .lx-door-right {
+  clip-path: inset(0 0 0 50%);
+  transform-origin: 100% 50%;
+}
+#how-it-works .lx-doors .process-step.lx-door-face {
+  position: absolute;
+  inset: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: none;
+}
+/* A thin mint seam where the leaves part. */
+#how-it-works .lx-door::after {
+  content: "";
+  position: absolute;
+  top: 6%;
+  bottom: 6%;
+  width: 2px;
+  z-index: 4;
+  background: linear-gradient(180deg, transparent, rgba(126, 227, 178, 0.95), transparent);
+  box-shadow: 0 0 18px rgba(126, 227, 178, 0.8);
+}
+#how-it-works .lx-door-left::after {
+  left: calc(50% - 2px);
+}
+#how-it-works .lx-door-right::after {
+  left: 50%;
+}
+
+/* Step controls: a quiet glass bar under the card. */
+#how-it-works .lx-step-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  align-self: center;
+  padding: 8px 10px;
+  border: 1px solid rgba(185, 240, 213, 0.22);
+  border-radius: 999px;
+  background: rgba(2, 36, 25, 0.45);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+#how-it-works .lx-step-arrow {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(185, 240, 213, 0.35);
+  border-radius: 50%;
+  color: #fff;
+  background: transparent;
+  font-size: 16px;
+  cursor: pointer;
+  transition:
+    background var(--lx-t1) var(--lx-ease),
+    border-color var(--lx-t1) var(--lx-ease),
+    transform var(--lx-t1) var(--lx-ease),
+    opacity var(--lx-t1) var(--lx-ease);
+}
+#how-it-works .lx-step-arrow:hover:not(:disabled) {
+  background: var(--lx-grad-cta);
+  border-color: transparent;
+  transform: translateY(-1px);
+}
+#how-it-works .lx-step-arrow:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+#how-it-works .lx-step-dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+#how-it-works .lx-step-dot {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+#how-it-works .lx-step-dot::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(185, 240, 213, 0.4);
+  transform: translate(-50%, -50%);
+  transition:
+    width var(--lx-t2) var(--lx-ease),
+    background var(--lx-t2) var(--lx-ease);
+}
+#how-it-works .lx-step-dot:hover::before {
+  background: rgba(185, 240, 213, 0.8);
+}
+#how-it-works .lx-step-dot.is-on::before {
+  width: 22px;
+  background: var(--lx-mint-bright);
+  box-shadow: 0 0 12px rgba(126, 227, 178, 0.7);
+}
+#how-it-works .lx-step-count {
+  min-width: 52px;
+  color: var(--lx-mint);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  font-variant-numeric: tabular-nums;
+}
+#how-it-works .lx-step-controls :focus-visible {
+  outline: 2px solid var(--lx-mint-bright);
+  outline-offset: 2px;
+}
+
+@media (max-width: 850px) {
+  #how-it-works {
+    --lx-stage-top: 76px;
+  }
+  #how-it-works.lx-stage-mode .lx-deck > .process-step {
+    min-height: 0;
+    height: auto;
+    margin-bottom: 0;
+  }
+  #how-it-works .lx-stage {
+    gap: 12px;
+  }
+  #how-it-works .lx-step-controls {
+    gap: 8px;
+  }
+  #how-it-works .lx-step-dot {
+    width: 18px;
+  }
+  #how-it-works .lx-step-count {
+    display: none;
+  }
+}
+/* Short phones: a smaller illustration keeps the whole card on screen. */
+@media (max-width: 850px) and (max-height: 760px) {
+  #how-it-works.lx-stage-mode .process-card-art,
+  #how-it-works.lx-stage-mode .process-card-art img {
+    height: 150px;
+    min-height: 150px;
+    max-height: 150px;
+  }
+  #how-it-works.lx-stage-mode .process-detail {
+    display: none;
+  }
+}
+
+/* 10d. CONTACT FORMS — validation and honest status messages ----------- */
+.lx-field-error {
+  margin: 6px 0 0;
+  color: #b42318;
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+form[data-lx-contact] .lx-invalid {
+  border-color: #d92d20 !important;
+  box-shadow: 0 0 0 4px rgba(217, 45, 32, 0.1) !important;
+  background-color: #fff !important;
+}
+.lx-form-status {
+  margin-top: 18px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  border: 1px solid var(--lx-line);
+  font-size: 14px;
+  line-height: 1.6;
+  animation: lx-hero-rise 0.6s var(--lx-ease) both;
+}
+.lx-form-status:focus {
+  outline: none;
+}
+.lx-form-status strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--lx-ink);
+  font-size: 15px;
+}
+.lx-form-status p {
+  margin: 0;
+  color: var(--lx-muted);
+}
+.lx-form-status[data-kind="notice"] {
+  background: linear-gradient(150deg, #fffaf0, #fff4e0);
+  border-color: #f5d9a8;
+}
+.lx-form-status[data-kind="success"] {
+  background: linear-gradient(150deg, #f2fbf6, #dff6ea);
+  border-color: rgba(16, 168, 117, 0.35);
+}
+.lx-form-status[data-kind="error"] {
+  background: #fef3f2;
+  border-color: #fecdca;
+}
+.lx-form-status-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+.lx-status-btn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--lx-grad-cta);
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform var(--lx-t1) var(--lx-ease);
+}
+.lx-status-btn:hover {
+  transform: translateY(-1px);
+}
+.lx-status-btn.is-ghost {
+  background: #fff;
+  color: var(--lx-deep);
+  box-shadow: inset 0 0 0 1px var(--lx-line);
+}
+.lx-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: lx-spin 0.8s linear infinite;
+}
+@keyframes lx-spin {
+  to { transform: rotate(360deg); }
+}
+button.is-loading {
+  cursor: progress;
+  opacity: 0.85;
+}
+
+/* Narrow desktops: the full link set needs the room "Client portal" uses. */
+@media (min-width: 1051px) and (max-width: 1180px) {
+  .site-header .nav-login {
+    display: none !important;
+  }
+}
+
+/* 11. RESPONSIVE ------------------------------------------------------ */
+@media (max-width: 1100px) {
+  .brand-word small {
+    display: none;
+  }
+}
+@media (max-width: 960px) {
+  .hero.hero-premium {
+    padding-top: 116px;
+    padding-bottom: 150px;
+  }
+  .hero-shell {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+  .hero-visual {
+    justify-self: start;
+    width: min(100%, 520px);
+    aspect-ratio: 16 / 11;
+  }
+  .hero-visual-frame {
+    border-radius: 28px;
+    animation-name: lx-card-open;
+  }
+  .hero-visual::after {
+    border-radius: 40px;
+  }
+  @keyframes lx-card-open {
+    from { clip-path: inset(100% 0 0 0 round 28px); }
+    to { clip-path: inset(0 0 0 0 round 28px); }
+  }
+  .hero-fact {
+    left: auto;
+    right: -12px;
+    top: -26px;
+    min-width: 0;
+    padding: 14px 18px;
+  }
+  .hero-fact strong {
+    font-size: 34px;
+  }
+  .hero.hero-premium .hero-overlay {
+    background:
+      linear-gradient(180deg, rgba(2, 30, 21, 0.7) 0%, rgba(3, 48, 34, 0.72) 45%, rgba(2, 30, 21, 0.95) 100%);
+  }
+}
+@media (max-width: 640px) {
+  .site-header .nav-wrap {
+    min-height: 66px;
+  }
+  .site-header .brand-logo {
+    width: 40px !important;
+    height: 40px !important;
+  }
+  .brand-word {
+    font-size: 16px;
+  }
+  .hero.hero-premium {
+    padding: 104px 20px 170px;
+  }
+  .hero.hero-premium h1 {
+    font-size: clamp(42px, 13vw, 60px);
+  }
+  .hero.hero-premium .hero-buttons {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+  .hero.hero-premium .hero-buttons > a {
+    justify-content: center;
+  }
+  .hero-visual {
+    aspect-ratio: 4 / 3;
+  }
+  .hero-fact {
+    right: 10px;
+    top: -22px;
+  }
+  .hero-fact-sub {
+    display: none;
+  }
+  .hero.hero-premium .hero-foot {
+    width: calc(100% - 40px);
+  }
+  #site-footer::after {
+    font-size: 23vw;
+  }
+}
+
+/* 12. REDUCED MOTION -------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .hero.hero-premium *,
+  .hero.hero-premium *::before,
+  .hero.hero-premium *::after,
+  .hero.hero-premium .hero-background,
+  .lx-aurora::before,
+  .lx-aurora::after,
+  main h2 .bg-clip-text,
+  .impact-title span,
+  .site-header .mobile-menu,
+  .lx-btn-sheen::after {
+    animation: none !important;
+  }
+  .hero.hero-premium .hero-background,
+  .hero-visual {
+    transform: none !important;
+  }
+  .site-header,
+  .site-header.is-hidden {
+    transform: none !important;
+  }
+  #products .lp-product:hover::before {
+    animation: none;
+  }
+}
